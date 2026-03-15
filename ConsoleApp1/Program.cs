@@ -49,14 +49,16 @@ static int DT(int i, int j, string s1, string s2)
 
 while (true)
 {
-    string s1 = Console.ReadLine();
-    if (s1 == "exit")
+    string input_string_1 = Console.ReadLine();
+    if (input_string_1 == "exit")
     {
         break;
     }
-    string s2 = Console.ReadLine();
+    string input_string_2 = Console.ReadLine();
+    string s1 = input_string_1.ToLower();
+    string s2 = input_string_2.ToLower();
 
-    Console.WriteLine($"Первая строка: {s1}, вторая строка: {s2}");
+    Console.WriteLine($"Первая строка: {input_string_1}, вторая строка: {input_string_2}");
     Console.WriteLine($"Расстояние Левенштейна: {D(s1.Length, s2.Length, s1, s2)}");
     Console.WriteLine($"Расстояние Дамерау-Левенштейна: {DT(s1.Length, s2.Length, s1, s2)}");
 }
