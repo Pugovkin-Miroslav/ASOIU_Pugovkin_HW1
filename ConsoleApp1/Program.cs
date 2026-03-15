@@ -1,13 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-
-static int min(int n1, int n2, int n3)
-{
-    int m = n1;
-    if (n2 < m) m = n2;
-    if (n3 < m) m = n3;
-    return m;
-}
 
 static int m(int i, int j, string s1, string s2)
 {
@@ -20,48 +13,39 @@ static int m(int i, int j, string s1, string s2)
 
 static int D(int i, int j, string s1, string s2)
 {
-    if (i == 0 && j == 0)
+    int[,] dp = new int[i + 1, j + 1];
+    for (int a = 0; a <= i; a++) dp[a, 0] = a;
+    for (int b = 0; b <= j; b++) dp[0, b] = b;
+    for (int a = 1; a <= i; a++)
     {
-        return 0;
+        for (int b = 1; b <= j; b++)
+        {
+            int cost = (s1[a - 1] == s2[b - 1]) ? 0 : 1;
+            dp[a, b] = Math.Min(Math.Min(dp[a - 1, b] + 1, dp[a, b - 1] + 1), dp[a - 1, b - 1] + cost);
+        }
     }
-    else if (i > 0 && j == 0)
-    {
-        return i;
-    }
-    else if (i == 0 && j > 0)
-    {
-        return j;
-    }
-    return min((D(i - 1, j, s1, s2) + 1), (D(i, j - 1, s1, s2) + 1), (D(i - 1, j - 1, s1, s2) + m(i-1, j-1, s1, s2)));
+    return dp[i, j];
 }
 
 static int DT(int i, int j, string s1, string s2)
 {
-    if (i == 0 && j == 0)
+    int[,] dp = new int[i + 1, j + 1];
+    for (int a = 0; a <= i; a++) dp[a, 0] = a;
+    for (int b = 0; b <= j; b++) dp[0, b] = b;
+    for (int a = 1; a <= i; a++)
     {
-        return 0;
+        for (int b = 1; b <= j; b++)
+        {
+            int cost = (s1[a - 1] == s2[b - 1]) ? 0 : 1;
+            dp[a, b] = Math.Min(Math.Min(dp[a - 1, b] + 1, dp[a, b - 1] + 1), dp[a - 1, b - 1] + cost);
+            if (a > 1 && b > 1 && s1[a - 1] == s2[b - 2] && s1[a - 2] == s2[b - 1])
+            {
+                dp[a, b] = Math.Min(dp[a, b], dp[a - 2, b - 2] + 1);
+            }
+        }
     }
-    else if (i > 0 && j == 0)
-    {
-        return i;
-    }
-    else if (i == 0 && j > 0)
-    {
-        return j;
-    }
-
-
-    int d0 = min((DT(i - 1, j, s1, s2) + 1), (DT(i, j - 1, s1, s2) + 1), (DT(i - 1, j - 1, s1, s2) + m(i - 1, j - 1, s1, s2)));
-
-    if (i > 1 && j > 1 && s1[i - 1] == s2[j - 2] && s1[i - 2] == s2[j - 1])
-    {
-        int transposition = DT(i - 2, j - 2, s1, s2) + 1;
-        if (transposition < d0)
-            return transposition;
-    }
-    return d0;
+    return dp[i, j];
 }
-
 
 while (true)
 {
